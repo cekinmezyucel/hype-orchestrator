@@ -24,3 +24,6 @@ run from your ide or from maven
 ```shell
 mvn spring-boot:run
 ```
+
+## A brief schema for the project
+![Alt text](./src/main/resources/static/images/diagram2.png?raw=true "Title")
