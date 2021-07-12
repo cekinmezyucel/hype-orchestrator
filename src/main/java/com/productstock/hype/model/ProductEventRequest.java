@@ -10,6 +10,8 @@ public class ProductEventRequest implements Serializable {
 
   private Action action;
 
+  private int stockCount;
+
   private String reservationToken;
 
 }

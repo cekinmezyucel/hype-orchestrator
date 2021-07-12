@@ -6,6 +6,8 @@ import com.productstock.hype.controller.response.ProductResponse;
 import com.productstock.hype.controller.response.ReservationResponse;
 import com.productstock.hype.exception.model.BusinessException;
 import com.productstock.hype.kafka.KafkaProducerService;
+import com.productstock.hype.model.Action;
+import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ public class ProductService {
   }
 
   public ProductResponse stockUpdate(String productId, Integer stockCount) {
+    kafkaProducerService.sendMessage(productId, String.join(";", Action.CREATE.name(), String.valueOf(stockCount)));
     return new ProductResponse();
   }
 
@@ -31,14 +34,16 @@ public class ProductService {
   }
 
   public ReservationResponse reserve(String productId) {
+    kafkaProducerService.sendMessage(productId, String.join(";", Action.RESERVE.name(), UUID.randomUUID().toString()));
     return new ReservationResponse();
   }
 
   public void unReserve(String productId, String reservationToken) {
-    kafkaProducerService.sendMessage(productId, reservationToken);
+    kafkaProducerService.sendMessage(productId, String.join(";", Action.UNRESERVE.name(), reservationToken));
   }
 
   public void sold(String productId, String reservationToken) {
+    kafkaProducerService.sendMessage(productId, String.join(";", Action.SOLD.name(), reservationToken));
   }
 
 }
