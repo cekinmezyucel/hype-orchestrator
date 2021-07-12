@@ -34,8 +34,9 @@ public class ProductService {
   }
 
   public ReservationResponse reserve(String productId) {
-    kafkaProducerService.sendMessage(productId, String.join(";", Action.RESERVE.name(), UUID.randomUUID().toString()));
-    return new ReservationResponse();
+    var reservationToken = UUID.randomUUID().toString();
+    kafkaProducerService.sendMessage(productId, String.join(";", Action.RESERVE.name(), reservationToken));
+    return new ReservationResponse(reservationToken);
   }
 
   public void unReserve(String productId, String reservationToken) {
